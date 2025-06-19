@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\jnsKendaraan;
+use App\Models\kendaraan;
 use Illuminate\Http\Request;
 
-class jnsKendaraanController extends Controller
+class kendaraanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class jnsKendaraanController extends Controller
     public function index()
     {
         //
-        $data = jnsKendaraan::get();
+        $data = kendaraan::get();
         return response()->json([
             'status'=>true,
             'pesan'=>'Data ditemukan',
@@ -28,10 +28,15 @@ class jnsKendaraanController extends Controller
     public function store(Request $request)
     {
         //
-        $data = new jnsKendaraan();
+        $data = new kendaraan();
 
         $data->id = $request->id;
-        $data->nm_jns_kendaraan = $request->nmJnsKendaraan;
+        $data->no_pol = $request->noPol;
+        $data->tahun_kendaraan = $request->tahunKendaraan;
+        $data->no_mesin = $request->noMesin;
+        $data->no_rangka = $request->noRangka;
+        $data->kapasitas_mesin = $request->kapasitasMesin;
+        $data->transmisi = $request->transmisi;
 
         $post = $data->save();
         return response()->json([
@@ -46,7 +51,7 @@ class jnsKendaraanController extends Controller
     public function show(string $id)
     {
         //
-        $data = jnsKendaraan::where('id','=',$id)->get();
+        $data = kendaraan::where('id','=',$id)->get();
         if ($data) {
             return response()->json([
                 'status'=>true,
@@ -67,18 +72,23 @@ class jnsKendaraanController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $data = jnsKendaraan::where('id','=',$id)->get();
+        $data = kendaraan::where('id','=',$id)->get();
         if(empty($data)) {
             return response()->json([
                 'status'=>false,
                 'pesan'=>'Data tidak ditemukan',
             ],404);
-        } 
-
-        $dataUpdate = jnsKendaraan::where('id','=',$id);
+        }
+        
+        $dataUpdate = kendaraan::where('id','=',$id);
         $dataUpdate->update([
             'id'=>$request->id,
-            'nm_jns_kendaraan'=>$request->nmJnsKendaraan,
+            'no_pol'=>$request->noPol,
+            'tahun_kendaraan'=>$request->tahunKendaraan,
+            'no_mesin'=>$request->noMesin,
+            'no_rangka'=>$request->noRangka,
+            'kapasitas_mesin'=>$request->kapasitasMesin,
+            'transmisi'=>$request->transmisi,
         ]);
         return response()->json([
             'status'=>true,
@@ -92,7 +102,7 @@ class jnsKendaraanController extends Controller
     public function destroy(string $id)
     {
         //
-        $data = jnsKendaraan::where('id','=',$id)->get();
+        $data = kendaraan::where('id','=',$id)->get();
         if(empty($data)) {
             return response()->json([
                 'status'=>false,
@@ -100,12 +110,12 @@ class jnsKendaraanController extends Controller
             ],404);
         } 
 
-        $data = jnsKendaraan::where('id','=',$id);
+        $data = kendaraan::where('id','=',$id);
         $data->delete();
 
         return response()->json([
             'status'=>true,
-            'pesan'=>'Data berhasil dihapus',
+            'pesan'=>'Data berhasil disimpan',
         ]);
     }
 }

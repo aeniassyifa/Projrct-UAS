@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\jnsKendaraan;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
-class jnsKendaraanController extends Controller
+class serviceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class jnsKendaraanController extends Controller
     public function index()
     {
         //
-        $data = jnsKendaraan::get();
+        $data = Service::get();
         return response()->json([
             'status'=>true,
             'pesan'=>'Data ditemukan',
@@ -28,10 +28,12 @@ class jnsKendaraanController extends Controller
     public function store(Request $request)
     {
         //
-        $data = new jnsKendaraan();
+        $data = new service();
 
         $data->id = $request->id;
-        $data->nm_jns_kendaraan = $request->nmJnsKendaraan;
+        $data->keluhan = $request->keluhan;
+        $data->tgl_masuk = $request->tglMasuk;
+        $data->tgl_keluar = $request->tglKeluar;
 
         $post = $data->save();
         return response()->json([
@@ -46,7 +48,7 @@ class jnsKendaraanController extends Controller
     public function show(string $id)
     {
         //
-        $data = jnsKendaraan::where('id','=',$id)->get();
+        $data = service::where('id','=',$id)->get();
         if ($data) {
             return response()->json([
                 'status'=>true,
@@ -67,18 +69,21 @@ class jnsKendaraanController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $data = jnsKendaraan::where('id','=',$id)->get();
+        $data = service::where('id','=',$id)->get();
         if(empty($data)) {
             return response()->json([
                 'status'=>false,
                 'pesan'=>'Data tidak ditemukan',
             ],404);
-        } 
-
-        $dataUpdate = jnsKendaraan::where('id','=',$id);
+        }
+        
+        $dataUpdate = service::where('id','=',$id);
         $dataUpdate->update([
             'id'=>$request->id,
-            'nm_jns_kendaraan'=>$request->nmJnsKendaraan,
+            'keluhan'=>$request->keluhan,
+            'tgl_masuk'=>$request->tglMasuk,
+            'tgl_keluar'=>$request->tglKeluar,
+            
         ]);
         return response()->json([
             'status'=>true,
@@ -92,7 +97,7 @@ class jnsKendaraanController extends Controller
     public function destroy(string $id)
     {
         //
-        $data = jnsKendaraan::where('id','=',$id)->get();
+        $data = service::where('id','=',$id)->get();
         if(empty($data)) {
             return response()->json([
                 'status'=>false,
@@ -100,12 +105,12 @@ class jnsKendaraanController extends Controller
             ],404);
         } 
 
-        $data = jnsKendaraan::where('id','=',$id);
+        $data = service::where('id','=',$id);
         $data->delete();
 
         return response()->json([
             'status'=>true,
-            'pesan'=>'Data berhasil dihapus',
+            'pesan'=>'Data berhasil disimpan',
         ]);
     }
 }
